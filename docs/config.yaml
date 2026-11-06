@@ -1,0 +1,47 @@
+# VCO example configuration. Precedence: CLI > environment (VCO_CONFIG) > YAML > defaults.
+tools:
+  ffmpeg: /usr/local/bin/ffmpeg     # must be the 9.x build; not /usr/bin/ffmpeg 6.1.1
+  ffprobe: /usr/local/bin/ffprobe
+  tsp: /usr/bin/tsp                 # TSDuck 3.46+; required for MPEG-TS
+analysis:
+  mode: fast
+  bin_seconds: 1.0
+  frames: false
+  stream: null
+  program: null
+decode:
+  decoder: auto                     # auto|native|dav1d|av1_cuvid|av1_qsv|h264_qsv|hevc_qsv
+  hwaccel: none                     # none|cuda|qsv|vaapi; hardware is opt-in
+  device: null
+  threads: null                     # null = len(os.sched_getaffinity(0)); do not use nproc
+ts_continuity:
+  policy: require                   # require|warn|off; require rejects TS on any error
+  timeout_s: 300
+  max_errors: 10000
+  map_times: true                   # pcrextract index→PTS mapping for evidence/bins
+timestamps:
+  policy: repair
+  discontinuity_factor: 10
+  min_discontinuity_s: 1.0
+scores:
+  model: structural-v1
+  structural_weights:
+    intra_share: 0.4
+    reference_count: 0.4
+    slice_count: 0.2
+  window_seconds: 5.0
+  top_intervals: 10
+reports:
+  formats: [txt, csv, json, html]
+encoding:
+  timeout_s: 3600
+  hardware_encoders: [av1_nvenc, av1_qsv]   # opt-in; only if capability probe succeeds
+web:
+  host: 127.0.0.1
+  port: 8666
+  input_dir: ./input
+  reports_dir: ./reports
+  max_workers: 1
+logging:
+  level: INFO
+  json: false

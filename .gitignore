@@ -1,0 +1,6 @@
+# runtime output folders (created by setup.sh / web.sh / analyze.sh)
+reports/
+input/
+scores/
+__pycache__/
+*.pyc
